@@ -9,12 +9,33 @@
 import UIKit
 
 class ToDoListViewController: UITableViewController {
-
+    
+    let itemArray = ["Find Mike", "Buy Eggos", "Destroy Demogorgon"]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view.
+        
+        if let navigationBar = navigationController?.navigationBar {
+            let appearance = UINavigationBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .systemBlue
+            appearance.titleTextAttributes = [.foregroundColor: UIColor.white,
+                                              .font: UIFont.boldSystemFont(ofSize: 25)]
+            navigationBar.standardAppearance = appearance
+            navigationBar.scrollEdgeAppearance = appearance
+        }
     }
-
+    //MARK: - Tableview Datasource Methods
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return itemArray.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
+        cell.textLabel?.text = itemArray[indexPath.row]
+        return cell
+    }
 
 }
 

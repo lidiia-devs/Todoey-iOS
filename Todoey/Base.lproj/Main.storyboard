@@ -8,7 +8,7 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--To Do List View Controller-->
+        <!--Todoey-->
         <scene sceneID="IJK-hN-oSZ">
             <objects>
                 <tableViewController id="UV8-nL-CqK" customClass="ToDoListViewController" customModule="Todoey" customModuleProvider="target" sceneMemberID="viewController">
@@ -31,11 +31,11 @@
                             <outlet property="delegate" destination="UV8-nL-CqK" id="DDQ-mv-GYD"/>
                         </connections>
                     </tableView>
-                    <navigationItem key="navigationItem" id="qXj-br-HwE"/>
+                    <navigationItem key="navigationItem" title="Todoey" id="qXj-br-HwE"/>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="gtJ-hQ-ZAx" userLabel="First Responder" customClass="UIResponder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1727.4809160305342" y="-2.1126760563380285"/>
+            <point key="canvasLocation" x="1541" y="-2"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="XcN-e7-GRM">
@@ -45,6 +45,9 @@
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="bdu-L2-j32">
                         <rect key="frame" x="0.0" y="59" width="393" height="44"/>
                         <autoresizingMask key="autoresizingMask"/>
+                        <textAttributes key="titleTextAttributes">
+                            <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        </textAttributes>
                     </navigationBar>
                     <nil name="viewControllers"/>
                     <connections>
