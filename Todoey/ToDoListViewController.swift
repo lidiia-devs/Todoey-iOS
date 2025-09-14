@@ -12,8 +12,14 @@ class ToDoListViewController: UITableViewController {
     
     var itemArray = ["Find Mike", "Buy Eggos", "Destroy Demogorgon"]
     
+    let defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        if let items = defaults.stringArray(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
         
         if let navigationBar = navigationController?.navigationBar {
             let appearance = UINavigationBarAppearance()
@@ -62,6 +68,9 @@ class ToDoListViewController: UITableViewController {
             //what will happen once the user clicks the Add Item button on our UIAlert
            
             self.itemArray.append(textField?.text! ?? "New Item")
+            
+            self.defaults.set(self.itemArray, forKey: "TodoListArray")
+            
             self.tableView.reloadData()
       
 //            print(textField?.text)
