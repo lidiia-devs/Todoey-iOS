@@ -8,6 +8,7 @@
 
 import UIKit
 
+
 class ToDoListViewController: UITableViewController {
     
     var itemArray = [Item]()
@@ -29,9 +30,9 @@ class ToDoListViewController: UITableViewController {
         newItem3.title = "Destroy Denogorgon"
         itemArray.append(newItem3)
     
-//        if let items = defaults.stringArray(forKey: "TodoListArray") as? [String] {
-//            itemArray = items
-//        } //retrieve the data from a created file in a device locally
+        if let items = defaults.stringArray(forKey: "TodoListArray") as? [Item] {
+            itemArray = items
+        } //retrieve the data from a created file in a device locally
         
         if let navigationBar = navigationController?.navigationBar {
             let appearance = UINavigationBarAppearance()
@@ -57,12 +58,7 @@ class ToDoListViewController: UITableViewController {
         
         cell.textLabel?.text = item.title
         
-        
-        
-        //ternary operator
-        
         cell.accessoryType = item.done ? .checkmark : .none
-        
 //        if item.done == true {
 //            cell.accessoryType = .checkmark
 //        } else {
@@ -95,6 +91,7 @@ class ToDoListViewController: UITableViewController {
         
         tableView.deselectRow(at: indexPath, animated: true)
     }
+    
     //MARK: - Add New Items
     
     @IBAction func addButtonPressed(_ sender: UIBarButtonItem) {
