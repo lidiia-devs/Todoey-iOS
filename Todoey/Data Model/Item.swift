@@ -8,6 +8,7 @@
 
 import Foundation
 
-class Item: Encodable { //for encodable must have standard data types not a custom class    var title: String = ""
+class Item: Encodable { //for encodable must have standard data types
+    var title: String = ""
     var done: Bool = false
 }
