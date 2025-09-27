@@ -13,10 +13,14 @@ class ToDoListViewController: UITableViewController {
     
     var itemArray = [Item]()
     
-    let defaults = UserDefaults.standard
+    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    
+    //let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
+         
+        print(dataFilePath ?? "File not found")
         
         let newItem = Item()
         newItem.title = "Find Mike"
@@ -30,9 +34,9 @@ class ToDoListViewController: UITableViewController {
         newItem3.title = "Destroy Denogorgon"
         itemArray.append(newItem3)
     
-        if let items = defaults.stringArray(forKey: "TodoListArray") as? [Item] {
-            itemArray = items
-        } //retrieve the data from a created file in a device locally
+//        if let items = defaults.stringArray(forKey: "TodoListArray") as? [Item] {
+//            itemArray = items
+//        } //retrieve the data from a created file in a device locally
         
         if let navigationBar = navigationController?.navigationBar {
             let appearance = UINavigationBarAppearance()
@@ -108,8 +112,15 @@ class ToDoListViewController: UITableViewController {
             
             self.itemArray.append(newItem)
             
-            self.defaults.set(self.itemArray, forKey: "TodoListArray")
+            let encoder = PropertyListEncoder()
+            do {
+                let data = try encoder.encode(self.itemArray)
+                try data.write(to: self.dataFilePath!)
+            } catch {
+                print("Error encoding item array: \(error)")
+            }
             
+           // self.defaults.set(self.itemArray, forKey: "TodoListArray")
             self.tableView.reloadData()
       
 //            print(textField?.text)
