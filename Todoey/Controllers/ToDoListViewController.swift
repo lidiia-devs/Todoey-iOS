@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import CoreData
 
 
 class ToDoListViewController: UITableViewController {
@@ -113,7 +114,10 @@ class ToDoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //what will happen once the user clicks the Add Item button on our UIAlert
             
-            let newItem = Item()
+            let context = (UIApplication.shared.delegate).persistentContainer.viewContext
+            
+            let newItem = Item(context: NSManagedObjectContext)
+            
             newItem.title = textField?.text! ?? "New Item"
             
             self.itemArray.append(newItem)
