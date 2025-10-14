@@ -76,6 +76,7 @@ class ToDoListViewController: UITableViewController {
         
         saveItems()
         
+        
         tableView.deselectRow(at: indexPath, animated: true)
         //        if itemArray[indexPath.row].done == false {
         //            itemArray[indexPath.row].done = true
