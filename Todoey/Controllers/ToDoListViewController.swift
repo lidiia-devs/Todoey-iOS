@@ -13,28 +13,16 @@ import CoreData
 class ToDoListViewController: UITableViewController {
     
     var itemArray = [Item]()
-    
-    let dataFilePath = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first?.appendingPathComponent("Items.plist")
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext //to have access to our AppDelegate as an object
     
     //let defaults = UserDefaults.standard
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print(dataFilePath ?? "File not found")
+        print(FileManager.default.urls(for: .documentDirectory, in: .userDomainMask))
         
         loadItems()
-//        let newItem = Item()
-//        newItem.title = "Find Mike"
-//        itemArray.append(newItem)
-//        
-//        let newItem2 = Item()
-//        newItem2.title = "Buy Eggos"
-//        itemArray.append(newItem2)
-//        
-//        let newItem3 = Item()
-//        newItem3.title = "Destroy Denogorgon"
-//        itemArray.append(newItem3)
         
         //        if let items = defaults.stringArray(forKey: "TodoListArray") as? [Item] {
         //            itemArray = items
@@ -81,7 +69,10 @@ class ToDoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print(itemArray[indexPath.row])
         
-        itemArray[indexPath.row].done = !itemArray[indexPath.row].done // toggle
+//        context.delete(itemArray[indexPath.row]) //removing the data from our permanent stores. context.delete needs to go first in the order!
+//        itemArray.remove(at: indexPath.row) //removing current item from the itemArray
+
+//        itemArray[indexPath.row].done = !itemArray[indexPath.row].done // toggle
         
         saveItems()
         
@@ -114,10 +105,10 @@ class ToDoListViewController: UITableViewController {
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
             //what will happen once the user clicks the Add Item button on our UIAlert
             
-            let context = (UIApplication.shared.delegate).persistentContainer.viewContext
             
-            let newItem = Item(context: NSManagedObjectContext)
+            let newItem = Item(context: self.context) //an automatilcally generated new NSManagedObject typed (rows inside the table) object (instead of an instance). That class already has access to all properties that we have specified in attributes
             
+            newItem.done = false
             newItem.title = textField?.text! ?? "New Item"
             
             self.itemArray.append(newItem)
@@ -136,27 +127,22 @@ class ToDoListViewController: UITableViewController {
     //MARK: - Model Manipulation Methods
     
     func saveItems() {
-        let encoder = PropertyListEncoder()
-        
+       
         do {
-            let data = try encoder.encode(itemArray)
-            try data.write(to: dataFilePath!)
+            try context.save()
         } catch {
-            print("Error encoding item array: \(error)")
+            print("Error saving context \(error)")
         }
         
-        // self.defaults.set(self.itemArray, forKey: "TodoListArray")
         self.tableView.reloadData()
     }
     
     func loadItems() {
-        if let data = try? Data(contentsOf: dataFilePath!) {
-            let decoder = PropertyListDecoder()
-            do {
-            itemArray = try decoder.decode([Item].self, from: data)
-            } catch {
-                print("Error decoding item array, \(error)")
-            }
+        let request : NSFetchRequest<Item> = Item.fetchRequest() // you need to specify the output data type e.g.: <Item>
+        do {
+        itemArray = try context.fetch(request)
+        } catch {
+            print("Error fetching data from context \(error)")
         }
     }
 }
