@@ -72,7 +72,7 @@ class ToDoListViewController: UITableViewController {
 //        context.delete(itemArray[indexPath.row]) //removing the data from our permanent stores. context.delete needs to go first in the order!
 //        itemArray.remove(at: indexPath.row) //removing current item from the itemArray
 
-//        itemArray[indexPath.row].done = !itemArray[indexPath.row].done // toggle
+        itemArray[indexPath.row].done = !itemArray[indexPath.row].done // toggle
         
         saveItems()
         
