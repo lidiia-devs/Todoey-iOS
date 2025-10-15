@@ -13,6 +13,7 @@ import CoreData
 class ToDoListViewController: UITableViewController {
     
     var itemArray = [Item]()
+    
     let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext //to have access to our AppDelegate as an object
     
     //let defaults = UserDefaults.standard
@@ -69,9 +70,9 @@ class ToDoListViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         //print(itemArray[indexPath.row])
         
-//        context.delete(itemArray[indexPath.row]) //removing the data from our permanent stores. context.delete needs to go first in the order!
-//        itemArray.remove(at: indexPath.row) //removing current item from the itemArray
-
+        //        context.delete(itemArray[indexPath.row]) //removing the data from our permanent stores. context.delete needs to go first in the order!
+        //        itemArray.remove(at: indexPath.row) //removing current item from the itemArray
+        
         itemArray[indexPath.row].done = !itemArray[indexPath.row].done // toggle
         
         saveItems()
@@ -126,8 +127,8 @@ class ToDoListViewController: UITableViewController {
     
     //MARK: - Model Manipulation Methods
     
-    func saveItems() {
-       
+    func saveItems() { //we need saveItems() func for CUD from CRUD (no Read)
+        
         do {
             try context.save()
         } catch {
@@ -137,14 +138,33 @@ class ToDoListViewController: UITableViewController {
         self.tableView.reloadData()
     }
     
-    func loadItems() {
-        let request : NSFetchRequest<Item> = Item.fetchRequest() // you need to specify the output data type e.g.: <Item>
+    func loadItems(with request: NSFetchRequest<Item> = Item.fetchRequest()) { //Item.fetchRequest - default. This one needs for Read from CRUD
+    //  let request : NSFetchRequest<Item> = Item.fetchRequest()// you need to specify the output data type e.g.: <Item>
         do {
-        itemArray = try context.fetch(request)
+            itemArray = try context.fetch(request)
         } catch {
             print("Error fetching data from context \(error)")
         }
+        
+        tableView.reloadData()
     }
+    
 }
 
+
+//MARK: - Search bar methods
+extension ToDoListViewController: UISearchBarDelegate {
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        let request : NSFetchRequest<Item> = Item.fetchRequest()
+        
+        request.predicate = NSPredicate(format: "title CONTAINS[cd] %@", searchBar.text!)
+        // in order to query objects using Core Data, we need to use NSPredicate
+        
+        request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)] //ascending - in alphabetic order
+        
+        loadItems(with: request)
+        
+    }
+}
 
