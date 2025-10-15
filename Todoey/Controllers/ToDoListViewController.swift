@@ -164,7 +164,17 @@ extension ToDoListViewController: UISearchBarDelegate {
         request.sortDescriptors = [NSSortDescriptor(key: "title", ascending: true)] //ascending - in alphabetic order
         
         loadItems(with: request)
-        
     }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text?.count == 0 {
+            loadItems()
+            
+            DispatchQueue.main.async {
+                searchBar.resignFirstResponder() //makes no cursor and keaboard
+            }
+        }
+    }
+    
 }
 
